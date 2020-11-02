@@ -93,11 +93,13 @@ public class PlayerCharacter : CustomBehavior
                 break;
             case PlayerState.Falling:
                 customRigidbody.velocity = horizontalSpeed * Vector2.left;
+                GetComponent<Animator>().SetBool("Falling", true);
                 break;
             case PlayerState.Dead:
                 customRigidbody.accelerate = Vector2.zero;
                 customRigidbody.velocity = Vector2.zero;
                 ScoreManager.Instance.SubmiteNewScore();
+                GetComponent<Animator>().SetBool("Dead", true);
                 if (afterDead != null)
                     afterDead.Invoke();
                 break;

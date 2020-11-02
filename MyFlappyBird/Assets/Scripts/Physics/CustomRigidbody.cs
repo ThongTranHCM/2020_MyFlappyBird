@@ -20,6 +20,19 @@ public class CustomRigidbody : MonoBehaviour
     {
         position += velocity * Time.fixedDeltaTime + accelerate * Time.fixedDeltaTime * Time.fixedDeltaTime / 2;
         velocity += Time.fixedDeltaTime * accelerate;
-        //transform.rotation = Quaternion.Euler(0, 0, -30 * _timeSinceTop * Mathf.Abs(_timeSinceTop) - 40 * _timeSinceTop);
+        transform.rotation = UpdateRotation(new Vector2(velocity.x, velocity.y / 2));
+    }
+
+    public static Quaternion UpdateRotation(Vector2 direction)
+    {
+        // rotate that vector by 90 degrees around the Z axis
+        Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
+
+        // get the rotation that points the Z axis forward, and the Y axis 90 degrees away from the target
+        // (resulting in the X axis facing the target)
+        Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
+
+        // changed this from a lerp to a RotateTowards because you were supplying a "speed" not an interpolation value
+        return targetRotation;
     }
 }

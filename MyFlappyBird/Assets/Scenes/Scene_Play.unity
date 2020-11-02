@@ -469,7 +469,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2a630a7feac28468e5d8e7dbabd8e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  digits: []
+  digits:
+  - {fileID: 1101439876}
+  - {fileID: 22683870}
+  - {fileID: 2019694201}
+  - {fileID: 831007775}
   scoreValue: 0
 --- !u!114 &784864427
 MonoBehaviour:
@@ -1722,7 +1726,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2a630a7feac28468e5d8e7dbabd8e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  digits: []
+  digits:
+  - {fileID: 1250605952}
+  - {fileID: 349327545}
+  - {fileID: 1653531092}
+  - {fileID: 1985558184}
   scoreValue: 1
 --- !u!1 &1487365193
 GameObject:
@@ -2286,7 +2294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CheckCollide: 1
   offSet: {x: 0, y: 0}
-  size: {x: 0.2, y: 0.2}
+  size: {x: 0.2, y: 0.15}
 --- !u!114 &1673064433
 MonoBehaviour:
   m_ObjectHideFlags: 0
