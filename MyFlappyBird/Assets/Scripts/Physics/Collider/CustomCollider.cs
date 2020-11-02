@@ -45,9 +45,8 @@ public abstract class CustomCollider : MonoBehaviour
 
     public bool DoesBordersCollide(CustomCollider otherCollider)
     {
-        Vector2 min1, max1, min2, max2;
-        this.BorderPoint(out min1, out max1);
-        otherCollider.BorderPoint(out min2, out max2);
+        this.BorderPoint(out Vector2 min1, out Vector2 max1);
+        otherCollider.BorderPoint(out Vector2 min2, out Vector2 max2);
         if (max1.x <= min2.x || max2.x <= min1.x)
             return false;
         if (max1.y <= min2.y || max2.y <= min1.y)
@@ -59,6 +58,13 @@ public abstract class CustomCollider : MonoBehaviour
     public virtual bool IsCollide(CustomCollider otherCollider)
     {
         return DoesBordersCollide(otherCollider);
+    }
+
+    public virtual bool IsContain(Vector2 point)
+    {
+        this.BorderPoint(out Vector2 min, out Vector2 max);
+        return (min.x < point.x && point.x < max.x && min.y < point.y && point.y < max.y);
+
     }
 
     public virtual List<Vector2> ShapePointList()
