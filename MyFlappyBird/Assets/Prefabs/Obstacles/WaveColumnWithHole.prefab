@@ -45,11 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
+  - {fileID: 6769431834289457914, guid: 3045b1df6c7af74419ee1be13b19bbf3, type: 3}
   - {fileID: 3363082662183406942, guid: e260ce192d19753459edcd008ec84af8, type: 3}
   numberOfObstacles: 6
-  topSprite: {fileID: 21300000, guid: 3b83e575dea214da2b89ecd97dcc8d24, type: 3}
-  downSprite: {fileID: 21300000, guid: 6ccb1758ecaf7406f9f870d7501ef595, type: 3}
-  star: {fileID: 0}
 --- !u!114 &8691922801911865548
 MonoBehaviour:
   m_ObjectHideFlags: 0

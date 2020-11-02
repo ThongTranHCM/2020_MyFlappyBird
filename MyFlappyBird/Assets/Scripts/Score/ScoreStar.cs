@@ -12,7 +12,7 @@ public class ScoreStar : CustomBehavior
     {
         if (collider.CompareTag("Player"))
         {
-            ScoreManager.Instance.AddScore(1);
+            ScoreManager.Instance.CurrentScore += 1;
             gameObject.SetActive(false);
         }
     }

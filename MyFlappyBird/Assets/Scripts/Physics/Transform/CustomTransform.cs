@@ -79,14 +79,14 @@ public class CustomTransform : MonoBehaviour
         return anchorMinPoint;
     }
 
-    public Vector3 GetPosition()
+    private Vector3 GetPosition()
     {
         if (!calculated) UpdateSelf();
         if (AdaptToParent)
             transform.position = (anchorMaxPoint + pMax + anchorMinPoint + pMin) / 2;
         return transform.position;
     }
-    public void SetPosition(Vector3 newPos)
+    private void SetPosition(Vector3 newPos)
     {
         if (!calculated) UpdateSelf();
         if (AdaptToParent)

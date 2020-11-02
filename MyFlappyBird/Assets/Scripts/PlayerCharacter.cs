@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerCharacter : CustomBehavior
 {
@@ -17,11 +18,14 @@ public class PlayerCharacter : CustomBehavior
     public float increaseSpeedAmount, increaseSpeedStepDuration;
     private float _timeToIncrease = 0, _bonusSpeed = 0;
     private float _timeSinceTop = 0, _peakY;
+    private CustomRigidbody customRigidbody;
+    public UnityEvent afterDead;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        _peakY = transform.position.y;
+        customRigidbody = GetComponent<CustomRigidbody>();
     }
 
     private void Update()
@@ -31,12 +35,10 @@ public class PlayerCharacter : CustomBehavior
             {
                 case PlayerState.Tutorial:
                     ToState((int)PlayerState.Playing);
-                    _timeSinceTop = -flapTime - Time.fixedDeltaTime + Time.fixedUnscaledDeltaTime;
-                    _peakY = transform.position.y + gravitySpeed * _timeSinceTop * _timeSinceTop / 2;
+                    customRigidbody.velocity = new Vector3(customRigidbody.velocity.x, flapTime * gravitySpeed);
                     break;
                 case PlayerState.Playing:
-                    _timeSinceTop = -flapTime - Time.fixedDeltaTime + Time.fixedUnscaledDeltaTime;
-                    _peakY = transform.position.y + gravitySpeed * _timeSinceTop * _timeSinceTop / 2;
+                    customRigidbody.velocity = new Vector3(customRigidbody.velocity.x, flapTime * gravitySpeed);
                     break;
             }
         }
@@ -48,14 +50,8 @@ public class PlayerCharacter : CustomBehavior
         switch (currentState)
         {
             case PlayerState.Playing:
-                _timeSinceTop += Time.fixedDeltaTime;
                 _timeToIncrease += Time.fixedDeltaTime;
                 CheckIncreaseSpeed();
-                MoveCharacter(Time.fixedDeltaTime);
-                break;
-            case PlayerState.Falling:
-                _timeSinceTop += Time.fixedDeltaTime;
-                MoveCharacter(Time.fixedDeltaTime);
                 break;
         }
     }
@@ -71,20 +67,7 @@ public class PlayerCharacter : CustomBehavior
 
     void MoveCharacter(float timePassed)
     {
-        Vector3 newPos = transform.position;
-        switch (currentState)
-        {
-            case PlayerState.Playing:
-                newPos += Vector3.right * timePassed * (horizontalSpeed + _bonusSpeed);
-                newPos.y = _peakY - gravitySpeed * _timeSinceTop * _timeSinceTop / 2;
-                break;
-            case PlayerState.Falling:
-                newPos += Vector3.left * timePassed * horizontalSpeed / 2;
-                newPos.y = _peakY - gravitySpeed * _timeSinceTop * _timeSinceTop / 2;
-                break;
-        }
-        customTransform.position = newPos;
-        transform.rotation = Quaternion.Euler(0, 0, -30 * _timeSinceTop * Mathf.Abs(_timeSinceTop) - 40 * _timeSinceTop);
+        //transform.rotation = Quaternion.Euler(0, 0, -30 * _timeSinceTop * Mathf.Abs(_timeSinceTop) - 40 * _timeSinceTop);
     }
 
     public override void OnCollide(CustomCollider collider)
@@ -96,12 +79,28 @@ public class PlayerCharacter : CustomBehavior
         if (collider.CompareTag("Floor"))
         {
             ToState((int)PlayerState.Dead);
-            this.enabled = false;
         }
     }
 
     public void ToState(int newState)
     {
         currentState = (PlayerState)newState;
+        switch (currentState)
+        {
+            case PlayerState.Playing:
+                customRigidbody.accelerate = gravitySpeed * Vector2.down;
+                customRigidbody.velocity = horizontalSpeed * Vector2.right;
+                break;
+            case PlayerState.Falling:
+                customRigidbody.velocity = horizontalSpeed * Vector2.left;
+                break;
+            case PlayerState.Dead:
+                customRigidbody.accelerate = Vector2.zero;
+                customRigidbody.velocity = Vector2.zero;
+                ScoreManager.Instance.SubmiteNewScore();
+                if (afterDead != null)
+                    afterDead.Invoke();
+                break;
+        }
     }
 }

@@ -35,8 +35,10 @@ public abstract class CustomCollider : MonoBehaviour
         if (spriteRenderer == null) return;
         Sprite sprite = spriteRenderer.sprite;
         if (sprite == null) return;
-        size = spriteRenderer.bounds.size;
-        offSet = new Vector2((0.5f - sprite.pivot.x) * size.x, (0.5f - sprite.pivot.y) * size.y);
+        size = spriteRenderer.bounds.size / 2;
+        Vector2 sprOffset = (sprite.rect.center - sprite.pivot);
+        Vector2 half = (sprite.rect.max - sprite.rect.center);
+        offSet = new Vector2((sprOffset.x / half.x) * size.x, (sprOffset.y / half.y) * size.y);
     }
 
     public abstract void BorderPoint(out Vector2 min, out Vector2 max);

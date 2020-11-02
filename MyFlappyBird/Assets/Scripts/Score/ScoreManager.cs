@@ -7,20 +7,56 @@ public class ScoreManager : MonoBehaviour
 {
     private static ScoreManager _instance;
     public static ScoreManager Instance { get { return _instance; } }
-    int score = 0;
 
-    public ScoreUI scoreUI;
+    private List<ScoreUI> currentScoreUIs = new List<ScoreUI>();
+    private List<ScoreUI> bestScoreUIs = new List<ScoreUI>();
+    int currentScore = 0;
+    public int CurrentScore { get { return currentScore; }
+        set
+        {
+            currentScore = value;
+            foreach (ScoreUI scoreUI in currentScoreUIs)
+            {
+                scoreUI.UpdateScore(currentScore);
+            }
+        }
+    }
+
+    public static int BestScore { get { return PlayerPrefs.GetInt("High Score", 0); }
+        set
+        {
+            int currentBest = PlayerPrefs.GetInt("High Score", 0);
+            if (value > currentBest)
+            {
+                PlayerPrefs.SetInt("High Score", value);
+                if (Instance != null)
+                foreach (ScoreUI scoreUI in Instance.bestScoreUIs)
+                {
+                    scoreUI.UpdateScore(value);
+                }
+            }
+        }
+    }
     private void Awake()
     {
         _instance = this;
     }
-    private void Start()
+
+    public void RegisterCurrentScoreUI(ScoreUI scoreUI)
     {
-        scoreUI.UpdateScore(score);
+        currentScoreUIs.Add(scoreUI);
+        scoreUI.UpdateScore(CurrentScore);
     }
-    public void AddScore(int incScore)
+
+    public void RegisterBestScoreUI(ScoreUI scoreUI)
     {
-        score += incScore;
-        scoreUI.UpdateScore(score);
+        currentScoreUIs.Add(scoreUI);
+        scoreUI.UpdateScore(BestScore);
+    }
+
+    public void SubmiteNewScore()
+    {
+        if (CurrentScore > BestScore)
+            BestScore = CurrentScore;
     }
 }

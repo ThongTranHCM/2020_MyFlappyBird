@@ -17,7 +17,8 @@ public class CameraManager : CustomBehavior
     void Awake()
     {
         _instance = this;
-        followDistance = this.transform.position - followTarget.position;
+        if (followTarget != null)
+            followDistance = this.transform.position - followTarget.position;
     }
 
     void Update()

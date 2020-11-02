@@ -5,8 +5,26 @@ using UnityEngine.UI;
 
 public class ScoreUI : MonoBehaviour
 {
+    public enum ScoreValue {
+        CurrentScore,
+        BestScore
+    }
     public List<Image> digits;
+    public ScoreValue scoreValue;
     public static Sprite[] digitSprites;
+
+    void Start()
+    {
+        switch (scoreValue)
+        {
+            case ScoreValue.CurrentScore:
+                ScoreManager.Instance.RegisterCurrentScoreUI(this);
+                break;
+            case ScoreValue.BestScore:
+                ScoreManager.Instance.RegisterBestScoreUI(this);
+                break;
+        }
+    }
 
     static Sprite DigitSprite(int digit)
     {
