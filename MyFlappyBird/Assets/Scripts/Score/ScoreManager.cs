@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -11,6 +11,8 @@ public class ScoreManager : MonoBehaviour
     private List<ScoreUI> currentScoreUIs = new List<ScoreUI>();
     private List<ScoreUI> bestScoreUIs = new List<ScoreUI>();
     int currentScore = 0;
+
+    public UnityEvent onScoreChange;
     public int CurrentScore { get { return currentScore; }
         set
         {
@@ -19,6 +21,8 @@ public class ScoreManager : MonoBehaviour
             {
                 scoreUI.UpdateScore(currentScore);
             }
+            if (onScoreChange != null)
+                onScoreChange.Invoke();
         }
     }
 

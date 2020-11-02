@@ -30,11 +30,14 @@ public class CustomColliderManager : MonoBehaviour
             return;
         foreach (CustomCollider collider in colliders)
         {
-            if (collider.enabled && collider.gameObject.activeInHierarchy)
-                if (collider != targetCollider && targetCollider.IsCollide(collider)) {
+            if (collider.enabled && collider.gameObject.activeInHierarchy && collider != targetCollider)
+            {
+                if (targetCollider.DoesBordersCollide(collider) && targetCollider.IsCollide(collider))
+                {
                     targetCollider.OnCollide(collider);
                     collider.OnCollide(targetCollider);
                 }
+            }
         }
     }
 }
